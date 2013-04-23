@@ -1,0 +1,55 @@
+import asraf.lib.EmailSender
+
+//def toAddressList=emailList.split(",")
+def emails="asraf.alom02@gmail.com, yxi389@gmail.com, daniel.honbo@gmail.com, alokchoudhary01@gmail.com"
+def toAddressList=emails.split(",")
+
+EmailSender sender=new EmailSender()
+sender.setHost("smtp.gmail.com")
+sender.setFromAddress("bos.process@gmail.com")
+sender.setFromPass("bosadmin123")
+
+sender.setToAddressList(toAddressList)
+sender.setMsgSubject("Cluster Monitoring Process; Running Status: OK")
+sender.setMsgBody(
+	"This is a status update notification."+"\n"+"\n"+
+	"Process is running periodically."+"\n"+"\n"+
+	"Next email should come 12hrs later from now."+"\n"+"\n"+"\n"+
+	"-BOS Admin"
+)
+
+/*if(cmdOutput.toLowerCase().contains("app calling failed")){
+	sender.setMsgSubject("FacebookPost Process; Running Status: WARNING")
+	sender.setMsgBody(
+		"Failed to execute REST client application."+"\n"+"\n"+
+		"No new process instance will be generated further."+"\n"+"\n"+
+		"Current instance is ending now."+"\n"+"\n"+"\n"+
+		"-BOS Admin"
+	)
+}
+else{
+	sender.setMsgSubject("FacebookPost Process; Running Status: OK")
+	sender.setMsgBody(
+		"This is a status update notification."+"\n"+"\n"+
+		"Process is running periodically."+"\n"+"\n"+
+		"Next email should come 8hrs later from now."+"\n"+"\n"+"\n"+
+		"-BOS Admin"
+	)
+}*/
+
+sender.setSMTPProperties()
+
+try{
+	sender.sendMsgOnly()
+	out="Successfully sent email notification"
+}catch(ex){
+	out="Email sending failed.."+ex.toString()
+}
+
+
+/*try{
+	sender.sendMsgWithAttachment(logFile)		//logFile="F:\\process.out"
+	out="Successfully sent email notification"
+}catch(ex){
+	out="Email sending failed.."+ex.toString()
+}*/

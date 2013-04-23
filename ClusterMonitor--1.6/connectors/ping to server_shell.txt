@@ -1,0 +1,6 @@
+# This shell script throws exception
+# 'host' is a global variable.
+# Ex: host="guru.eecs.northwestern.edu"
+
+
+ping -c 2 ${host}

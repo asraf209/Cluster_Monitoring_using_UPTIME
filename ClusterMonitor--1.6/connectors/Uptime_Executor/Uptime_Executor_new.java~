@@ -1,0 +1,293 @@
+
+import java.util.List;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import org.ow2.bonita.connector.core.ConnectorError;
+import org.ow2.bonita.connector.core.ProcessConnector;
+
+import ch.ethz.ssh2.Connection;
+import ch.ethz.ssh2.ConnectionInfo;
+import ch.ethz.ssh2.Session;
+import ch.ethz.ssh2.StreamGobbler;
+
+public class Uptime_Executor extends ProcessConnector {
+	String output="";
+	boolean is_restarted=false;
+	// DO NOT REMOVE NOR RENAME THIS FIELD
+	private java.lang.Long port;
+	// DO NOT REMOVE NOR RENAME THIS FIELD
+	private java.lang.String user_name;
+	// DO NOT REMOVE NOR RENAME THIS FIELD
+	private java.lang.String pass_word;
+	// DO NOT REMOVE NOR RENAME THIS FIELD
+	private java.lang.String host_name;
+	// DO NOT REMOVE NOR RENAME THIS FIELD
+	private java.lang.Double last_uptime;
+		
+	
+	@Override
+	protected void executeConnector() throws Exception {						
+		
+		InputStream stdout;
+		BufferedReader stdoutReader;
+		
+		try{
+			Connection conn = new Connection(host_name, port.intValue());
+			ConnectionInfo isConnected=conn.connect();            
+			if(isConnected == null)						
+				throw new IOException("SSH Connection failed");			
+				
+			boolean isAuthenticated = conn.authenticateWithPassword(user_name, pass_word);	
+			if (isAuthenticated == false)	        		        
+				throw new IOException("Server Authentication failed");
+			
+		//try{        	
+			Session sess;        	        	
+			sess = conn.openSession();
+			sess.execCommand("uptime");        
+					
+			stdout = new StreamGobbler(sess.getStdout());
+			stdoutReader = new BufferedReader(new InputStreamReader(stdout));
+										
+			String line;		//holds command output			
+			while(true)
+			{
+				line = stdoutReader.readLine();
+				if (line == null)	break;
+				else	output+=line;				
+			}			
+			
+			String backup_output=output;
+			
+			if(output!=""){
+				
+				double uptime=getUptime();
+				
+				if(last_uptime < 0){		//for the first run when lastUptime = -1
+					last_uptime=uptime;
+					is_restarted=false;
+					output="Output: \""+output+"\""+"; "+"Uptime: "+uptime+" days";
+				}
+				else if(uptime < last_uptime){		//server got restart
+					is_restarted=true;
+					last_uptime=uptime;
+					//output="Server restarted. "+"Uptime: "+backup_output+" days";
+					output="Server Rebooted.. "+"\n"+"\n";
+					output+="Uptime: "+backup_output.substring(
+																backup_output.indexOf("up")+2, 
+																backup_output.indexOf("users")-4
+															  );
+				}				
+				else{
+					is_restarted=false;
+					last_uptime=uptime;							
+					output="Output: \""+output+"\""+"; "+"Uptime: "+uptime+" days";
+				}
+			}
+			else
+				output="Failed to execute uptime.."+output;
+					
+			sess.close();
+			conn.close();
+			
+		}catch (Exception ex){
+			if(ex.toString().contains("SSH Connection failed")){
+				is_restarted=true;	//this allowed to move forward to the next Email Notification step
+				output=ex.toString()+" on "+host_name+":"+port.intValue();
+			}
+			else if(ex.toString().contains("Server Authentication failed")){
+				is_restarted=true;        	
+				output=ex.toString()+" on "+host_name;
+			}
+			else{
+				is_restarted=true;
+				output="Error in executing 'uptime'.."+ex.toString();
+			}
+		}
+
+	}
+
+	double getUptime()
+	{
+		double uptime=0, days=0, hrs=0, min=0;
+		
+		if(output.toLowerCase().contains("day"))
+			days=Double.parseDouble(parseDays());		
+		
+		if(!output.toLowerCase().contains("min"))
+			hrs=Double.parseDouble(parseHrs());
+		
+		min=Double.parseDouble(parseMins());			
+			
+		uptime=days+(hrs/24)+(min/(60*24));		//uptime will be calculated as #days
+						
+		return uptime;
+	}
+	
+	String parseDays()
+	{		
+		int si, ei;
+		String str="";
+		
+		si=output.indexOf("up")+3;
+		ei=output.indexOf("day")-1;
+		str=output.substring(si, ei).trim();
+		
+		//output+=" "+str;		
+		return str;
+	}
+	
+	String parseHrs()
+	{		
+		int si, ei;
+		String str="";
+		
+		if(output.toLowerCase().contains("day")){		
+			//parse Hours from HH:MM
+			si=output.indexOf("day");
+			si=output.indexOf(' ', si);	//Next ' ' after "days,"
+									
+			ei=output.indexOf(':', si);	//Next ':' after "days,"
+			str=output.substring(si, ei).trim();
+		}
+		else{
+			//parse only Hours from HH:MM			
+			si=output.indexOf("up");
+			si=output.indexOf(' ', si);	//Next ' ' after "up"
+						
+			ei=output.indexOf(':', si);	//Next ':' after "up"
+			str=output.substring(si, ei).trim();						
+		}
+		
+		//output+=" "+str;		
+		return str;
+	}
+	
+	String parseMins()
+	{		
+		int si, ei;
+		String str="";
+		
+		if(output.toLowerCase().contains("day")){					
+			if(output.toLowerCase().contains("min")){
+				//parse Mins from "16:36:25 up 1 day, 56 min,  2 users,  load average: 4.46, 4.22, 4.01"
+				si=output.indexOf("day");
+				si=output.indexOf(' ', si);	//Next ' ' after "days,"
+				
+				ei=output.indexOf("min", si);	//Next ' ' after ":"
+			}
+			else{
+				//parse Mins from HH:MM
+				si=output.indexOf("day");
+				si=output.indexOf(':', si);		//next ':' after 'days'
+				si=si+1;
+					
+				ei=output.indexOf(',', si);	//Next ',' after ":"
+			}
+			
+			str=output.substring(si, ei).trim();
+		}
+		
+		else{
+			if(output.toLowerCase().contains("min")){
+				//parse Mins from "16:36:25 up 56 min,  2 users,  load average: 4.46, 4.22, 4.01"
+				si=output.indexOf("up");
+				si=output.indexOf(' ', si);	//Next ' ' after "up"
+				
+				ei=output.indexOf("min", si);	//Next ' ' after ":"
+			}
+			else{
+				//parse only Mins from HH:MM			
+				si=output.indexOf("up");
+				si=output.indexOf(':', si);		//next ':' after 'up'
+				si=si+1;
+				
+				ei=output.indexOf(',', si);	//Next ',' after ":"
+			}
+			
+			str=output.substring(si, ei).trim();						
+		}		
+		
+		//output+=" "+str;		
+		return str;
+	}
+		
+	
+	@Override
+	protected List<ConnectorError> validateValues() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+
+	/**
+	 * Getter for output argument 'connectorOutput'
+	 * DO NOT REMOVE NOR RENAME THIS GETTER, unless you also change the related entry in the XML descriptor file
+	 */
+	public java.lang.String getConnectorOutput() {
+		// TODO Add return value for the output here
+		return output;
+	}
+	
+	/**
+	 * Getter for output argument 'isRestarted'
+	 * DO NOT REMOVE NOR RENAME THIS GETTER, unless you also change the related entry in the XML descriptor file
+	 */
+	public java.lang.Boolean getIsRestarted() {
+		// TODO Add return value for the output here
+		return is_restarted;
+	}
+
+	/**
+	 * Getter for output argument 'lastUptime'
+	 * DO NOT REMOVE NOR RENAME THIS GETTER, unless you also change the related entry in the XML descriptor file
+	 */
+	public java.lang.Double getLastUptime() {
+		// TODO Add return value for the output here
+		return last_uptime;
+	}
+
+	/**
+	 * Setter for input argument 'port'
+	 * DO NOT REMOVE NOR RENAME THIS SETTER, unless you also change the related entry in the XML descriptor file
+	 */
+	public void setPort(java.lang.Long port) {
+		this.port = port;
+	}
+
+	/**
+	 * Setter for input argument 'user_name'
+	 * DO NOT REMOVE NOR RENAME THIS SETTER, unless you also change the related entry in the XML descriptor file
+	 */
+	public void setUser_name(java.lang.String user_name) {
+		this.user_name = user_name;
+	}
+
+	/**
+	 * Setter for input argument 'pass_word'
+	 * DO NOT REMOVE NOR RENAME THIS SETTER, unless you also change the related entry in the XML descriptor file
+	 */
+	public void setPass_word(java.lang.String pass_word) {
+		this.pass_word = pass_word;
+	}
+
+	/**
+	 * Setter for input argument 'host_name'
+	 * DO NOT REMOVE NOR RENAME THIS SETTER, unless you also change the related entry in the XML descriptor file
+	 */
+	public void setHost_name(java.lang.String host_name) {
+		this.host_name = host_name;
+	}
+
+	/**
+	 * Setter for input argument 'last_uptime'
+	 * DO NOT REMOVE NOR RENAME THIS SETTER, unless you also change the related entry in the XML descriptor file
+	 */
+	public void setLast_uptime(java.lang.Double last_uptime) {
+		this.last_uptime = last_uptime;
+	}
+
+}

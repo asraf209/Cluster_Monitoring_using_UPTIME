@@ -1,0 +1,23 @@
+No of Instances: 2
+All Instances:
+[org.ow2.bonita.facade.runtime.impl.ProcessInstanceImpl[uuid: ClusterMonitor--1.5--42, processDefinitionUUID: Clust
+erMonitor--1.5, processUUID: ClusterMonitor--1.5--42, parentInstanceUUID: null, rootInstanceUUID: ClusterMonitor--1
+.5--42, childrenInstanceUUID: [], startedBy: admin, endedBy: admin, startedDate: Wed Mar 13 14:40:04 CDT 2013, ende
+dDate: Wed Mar 13 14:51:01 CDT 2013, initialVariableValues: {pulse7LastUptime=-1.0, cmdOutput=null, lastUptime=-1.0
+, pulse3LastUptime=-1.0, guru5LastUptime=-1.0, host=null, pulse1LastUptime=-1.0, pulseLastUptime=-1.0, count=0, pul
+se4LastUptime=-1, pulse5LastUptime=-1.0, pulse6LastUptime=-1.0, guru4LastUptime=-1.0, guru3LastUptime=-1.0, emailLi
+st=asraf.alom02@gmail.com, yxi389@gmail.com, daniel.honbo@gmail.com, alokchoudhary01@gmail.com, guru2LastUptime=-1.
+0, pulse2LastUptime=-1.0, guru7LastUptime=-1.0, guru1LastUptime=-1.0, guru6LastUptime=-1.0, pulse8LastUptime=-1.0, 
+guruLastUptime=-1.0, appDir=/home/monitor/MonitoringApp}, activeUsers: 0], org.ow2.bonita.facade.runtime.impl.Proce
+ssInstanceImpl[uuid: ClusterMonitor--1.5--43, processDefinitionUUID: ClusterMonitor--1.5, processUUID: ClusterMonit
+or--1.5--43, parentInstanceUUID: null, rootInstanceUUID: ClusterMonitor--1.5--43, childrenInstanceUUID: [], started
+By: admin, endedBy: admin, startedDate: Wed Mar 13 15:00:03 CDT 2013, endedDate: Wed Mar 13 15:00:44 CDT 2013, init
+ialVariableValues: {pulse7LastUptime=-1.0, cmdOutput=null, pulse3LastUptime=-1.0, lastUptime=-1.0, guru5LastUptime=
+-1.0, pulse1LastUptime=-1.0, host=null, count=0, pulseLastUptime=-1.0, pulse4LastUptime=-1, pulse5LastUptime=-1.0, 
+pulse6LastUptime=-1.0, guru4LastUptime=-1.0, emailList=asraf.alom02@gmail.com, yxi389@gmail.com, daniel.honbo@gmail
+.com, alokchoudhary01@gmail.com, guru3LastUptime=-1.0, pulse2LastUptime=-1.0, guru2LastUptime=-1.0, guru7LastUptime
+=-1.0, guru1LastUptime=-1.0, guru6LastUptime=-1.0, pulse8LastUptime=-1.0, appDir=/home/monitor/MonitoringApp, guruL
+astUptime=-1.0}, activeUsers: 0]]
+
+Deleted the process instance, ClusterMonitor--1.5--42
+New process instance created, ClusterMonitor--1.5--44

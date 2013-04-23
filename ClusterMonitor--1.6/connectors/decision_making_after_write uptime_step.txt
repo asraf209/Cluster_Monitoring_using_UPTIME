@@ -1,0 +1,5 @@
+processInstance.getNb()%36==0
+
+and 
+
+processInstance.getNb()%36!=0

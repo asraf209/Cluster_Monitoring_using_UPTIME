@@ -1,0 +1,16 @@
+
+It uses these libs:
+	1. EmailSenderLib.jar	(developed by me)
+	2. activation.jar
+	3. mail.jar
+
+Input:
+======
+	1. email_subject	-This is the subject line of the email
+	2. msg_body	-This is the body of the email
+	3. to_address	-email addressess with ',' seperated
+
+
+Output:
+=======
+	1. output	-This is the step output

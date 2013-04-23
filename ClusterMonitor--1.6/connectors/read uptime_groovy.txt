@@ -1,0 +1,41 @@
+# This groovy script throws Exception
+
+
+def fileName=appDir+"/cluster_monitor.in"
+def file=new File(fileName)
+
+def upt=file.readLines()[0].trim()
+guruLastUptime=upt as double
+upt=file.readLines()[1].trim()
+guru1LastUptime=upt as double
+upt=file.readLines()[2].trim()
+guru2LastUptime=upt as double
+upt=file.readLines()[3].trim()
+guru3LastUptime=upt as double
+upt=file.readLines()[4].trim()
+guru4LastUptime=upt as double
+upt=file.readLines()[5].trim()
+guru5LastUptime=upt as double
+upt=file.readLines()[6].trim()
+guru6LastUptime=upt as double
+upt=file.readLines()[7].trim()
+guru7LastUptime=upt as double
+
+upt=file.readLines()[8].trim()
+pulseLastUptime=upt as double
+upt=file.readLines()[9].trim()
+pulse1LastUptime=upt as double
+upt=file.readLines()[10].trim()
+pulse2LastUptime=upt as double
+upt=file.readLines()[11].trim()
+pulse3LastUptime=upt as double
+upt=file.readLines()[12].trim()
+pulse4LastUptime=upt as double
+upt=file.readLines()[13].trim()
+pulse5LastUptime=upt as double
+upt=file.readLines()[14].trim()
+pulse6LastUptime=upt as double
+upt=file.readLines()[15].trim()
+pulse7LastUptime=upt as double
+upt=file.readLines()[16].trim()
+pulse8LastUptime=upt as double

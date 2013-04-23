@@ -1,0 +1,34 @@
+if(count==0)
+	return guruLastUptime
+else if(count==1)
+	return guru1LastUptime
+else if(count==2)
+	return guru2LastUptime
+else if(count==3)
+	return guru3LastUptime
+else if(count==4)
+	return guru4LastUptime
+else if(count==5)
+	return guru5LastUptime
+else if(count==6)
+	return guru6LastUptime
+else if(count==7)
+	return guru7LastUptime	
+else if(count==8)
+	return pulseLastUptime
+else if(count==9)
+	return pulse1LastUptime
+else if(count==10)
+	return pulse2LastUptime
+else if(count==11)
+	return pulse3LastUptime
+else if(count==12)
+	return pulse4LastUptime
+else if(count==13)
+	return pulse5LastUptime
+else if(count==14)
+	return pulse6LastUptime
+else if(count==15)
+	return pulse7LastUptime
+else if(count==16)
+	return pulse8LastUptime

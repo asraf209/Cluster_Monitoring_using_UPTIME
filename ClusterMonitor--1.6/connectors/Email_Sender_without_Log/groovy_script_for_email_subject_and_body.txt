@@ -1,0 +1,38 @@
+You can use groovy to update subject line and msg body.
+
+SubjectLine:
+============
+out="Cluster Monitoring Process; WARNING on "+host
+
+
+MsgBody:
+========
+
+Here "cmdOutput" is a global variable.
+
+
+if(cmdOutput.toLowerCase().contains("ping failed")){
+	out="PING failed..."+host+" not reachable"+"\n"+"\n"
+	out+=cmdOutput+"\n"+"\n"
+}
+else if(cmdOutput.toLowerCase().contains("ssh failed")){
+	out="SSH Connection Failed on "+host+"\n"+"\n"
+	out+=cmdOutput+"\n"+"\n"
+}
+else if(cmdOutput.toLowerCase().contains("authentication failed")){
+	out="SSH Authentication Failed on "+host+"\n"+"\n"
+	out+=cmdOutput+"\n"+"\n"
+}
+else if(cmdOutput.toLowerCase().contains("server rebooted")){
+	out=host+" got REBOOT..."+"\n"+"\n"
+	out+=cmdOutput+"\n"+"\n"
+}
+else if(cmdOutput.toLowerCase().contains("parsing error")){
+	out="Error in reading uptime from file.."+"\n"+"\n"
+	out+=cmdOutput+"\n"+"\n"
+}
+else{
+	out="Error in executing 'uptime'"+"\n\n"
+	out+=cmdOutput+"\n"+"\n"
+}
+

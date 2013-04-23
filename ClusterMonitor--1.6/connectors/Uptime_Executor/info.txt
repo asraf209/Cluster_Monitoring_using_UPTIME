@@ -1,0 +1,22 @@
+This connector executes a command "uptime" on to the host server.
+
+Be sure to add an ssh java lib, like; "ganymed-ssh2-build251beta1.jar"
+
+Inputs:
+========
+	1.	host_name 	-129.105.6.88
+	2.	port		-Integer value; 22(default for ssh), 7494 for yves machine
+	3.	user_name	-asraf
+	4.	pass_word	-asraf
+	5.	last_uptime	-(init value= -1); float
+
+
+Output:
+=======
+	1.	connectorOutput
+	2.	isRestarted	----boolean; A flag
+	3.	lastUptime	
+
+
+
+

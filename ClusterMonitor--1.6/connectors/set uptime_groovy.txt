@@ -1,0 +1,56 @@
+# No exception thrown
+
+switch(count){
+	case 0:
+		guruLastUptime=lastUptime
+		break
+	case 1:
+		guru1LastUptime=lastUptime
+		break
+	case 2:
+		guru2LastUptime=lastUptime
+		break
+	case 3:
+		guru3LastUptime=lastUptime
+		break
+	case 4:
+		guru4LastUptime=lastUptime
+		break
+	case 5:
+		guru5LastUptime=lastUptime
+		break
+	case 6:
+		guru6LastUptime=lastUptime
+		break
+	case 7:
+		guru7LastUptime=lastUptime
+		break
+		
+	case 8:
+		pulseLastUptime=lastUptime
+		break
+	case 9:
+		pulse1LastUptime=lastUptime
+		break
+	case 10:
+		pulse2LastUptime=lastUptime
+		break
+	case 11:
+		pulse3LastUptime=lastUptime
+		break
+	case 12:
+		pulse4LastUptime=lastUptime
+		break
+	case 13:
+		pulse5LastUptime=lastUptime
+		break
+	case 14:
+		pulse6LastUptime=lastUptime
+		break
+	case 15:
+		pulse7LastUptime=lastUptime
+		break
+	case 16:
+		pulse8LastUptime=lastUptime
+		break
+}
